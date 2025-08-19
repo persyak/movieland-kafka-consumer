@@ -1,0 +1,22 @@
+spring:
+  kafka:
+    template:
+      default-topic: movietopic-int
+    consumer:
+      bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+      group-id: movieland-group
+      key-deserializer: org.apache.kafka.common.serialization.IntegerDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        retries: 10
+
+  datasource:
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://127.0.0.1:5432/movielandreporting
