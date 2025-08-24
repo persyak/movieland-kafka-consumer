@@ -17,7 +17,15 @@ public class KafkaConsumerConfig {
 
     public DefaultErrorHandler defaultErrorHandler() {
         FixedBackOff fixedBackOff = new FixedBackOff(1000L, 2); // Retry for 2 times with 1 second interval
-        return new DefaultErrorHandler(fixedBackOff);
+
+        DefaultErrorHandler defaultErrorHandler = new DefaultErrorHandler(fixedBackOff);
+
+        defaultErrorHandler.setRetryListeners((record, ex, deliveryAttempt) ->
+                log.info("Failed record in Retry Listener, Exception : {} , deliveryAttempt : {}",
+                        ex.getMessage(), deliveryAttempt)
+        );
+
+        return defaultErrorHandler;
     }
 
     @Bean

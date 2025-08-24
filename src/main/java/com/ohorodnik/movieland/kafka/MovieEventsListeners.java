@@ -1,6 +1,6 @@
 package com.ohorodnik.movieland.kafka;
 
-import com.ohorodnik.movieland.dto.MovieDetailsDto;
+import com.ohorodnik.movieland.dto.events.MovieEventDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -13,11 +13,14 @@ import org.springframework.stereotype.Component;
 public class MovieEventsListeners {
 
     @KafkaListener(topics = "movietopic-int")
-    public void onMessage(ConsumerRecord<Integer, MovieDetailsDto> consumerRecord) {
+    public void onMessage(ConsumerRecord<Integer, MovieEventDto> consumerRecord) {
 
-        MovieDetailsDto movieDetailsDto = consumerRecord.value();
+        MovieEventDto movieEventDto = consumerRecord.value();
 
-        // Logic to handle the incoming message from Kafka
-        System.out.println("Received message: " + movieDetailsDto);
+        log.info("Message received successfully with key: {}, value: {}, partition: {}, offset: {}",
+                consumerRecord.key(),
+                movieEventDto,
+                consumerRecord.partition(),
+                consumerRecord.offset());
     }
 }
